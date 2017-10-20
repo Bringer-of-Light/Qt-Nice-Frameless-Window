@@ -1,0 +1,6 @@
+#common
+*.user
+build*/
+
+#mac
+.DS_Store
