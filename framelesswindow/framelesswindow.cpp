@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QPoint>
 #include <QSize>
+#ifdef Q_OS_WIN
 
 #include <windows.h>
 #include <WinUser.h>
@@ -219,3 +220,4 @@ void CFramelessWindow::setContentsMargins(int left, int top, int right, int bott
     m_margins.setRight(right);
     m_margins.setBottom(bottom);
 }
+#endif //Q_OS_WIN

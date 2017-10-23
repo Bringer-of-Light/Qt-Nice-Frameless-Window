@@ -22,6 +22,4 @@ macx{
     OBJECTIVE_SOURCES += \
 		framelesswindow.mm
 }
-
-OBJECTIVE_SOURCES += \
-    framelesswindow.mm
+include (../projectinclude/common.pri)

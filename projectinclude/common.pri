@@ -1,0 +1,4 @@
+
+macx{
+    LIBS += -framework Cocoa
+}
