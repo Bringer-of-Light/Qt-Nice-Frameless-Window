@@ -8,13 +8,13 @@ Qt Frameless Window for both Windows and OS X, support Aero Snap, drop shadow on
 
 
 # How to use
-Just use class "CFramelessWindow" as your base mainwindow class instead of QMainWindow, and Enjoy!
+Just use class "CFramelessWindow" as the base mainwindow class instead of QMainWindow, and Enjoy!
 
 ## Method 1
 If you want to create a new project, then method 1 should be used.   
 1. Create a new Qt subproject project say myproject.pro, just like Qt-Nice-Frameless-Window.pro.
 ![](screenshots/screenshot_step_10.png) 
-2. Copy folder "framelesswindow" and "projectinclude" to myproject path, your project directory structure should be looked like this:   
+2. Copy folder "framelesswindow" and "projectinclude" to myproject path, the project directory structure should be looked like this:   
   -myproject/   
   &nbsp;&nbsp;-myproject.pro   
   &nbsp;&nbsp;-myproject.pro.user   
@@ -37,16 +37,16 @@ If you want to create a new project, then method 1 should be used.
 | 1 | 2 | 3 |
 |:--:|:--:|:--:|
 | ![](screenshots/screenshot_step_15.png) | ![](screenshots/screenshot_step_16.png) | ![](screenshots/screenshot_step_17.png) |
-8. After step 7 is done, something will be added into your myapp.pro file automaticly, run qmake again.
+8. After step 7 is done, something will be added into the myapp.pro file automaticly, run qmake again.
 ![](screenshots/screenshot_step_19.png) 
-8. Use class "CFramelessWindow" as your base mainwindow class instead of QMainWindow.
+8. Use class "CFramelessWindow" as the base mainwindow class instead of QMainWindow.
 ![](screenshots/screenshot_step_18.png) 
 
 ## Method 2
 If you already have a project say myproject.pro, then method 2 should be used.
 1. Copy folder "framelesswindow" and "projectinclude" to myproject path.
 2. Add "INCLUDEPATH += $$PWD/framelesswindow" and "DEPENDPATH += $$PWD/framelesswindow" in myproject.pro.
-3. Use class "CFramelessWindow" as your base mainwindow class instead of QMainWindow.
+3. Use class "CFramelessWindow" as the base mainwindow class instead of QMainWindow.
 
 # Platform
 - Tested with Qt5.9.2.
