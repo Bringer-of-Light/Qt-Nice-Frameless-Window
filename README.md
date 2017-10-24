@@ -62,6 +62,7 @@ macx{
 }
 ```
 3. Use class "CFramelessWindow" as the base mainwindow class instead of QMainWindow.
+
 | 1 | 2 |
 |:-------------:|:-------------:|
 | ![](screenshots/screenshot_step_21.png) | ![](screenshots/screenshot_step_22.png) |
