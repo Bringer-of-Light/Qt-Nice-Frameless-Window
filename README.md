@@ -38,9 +38,9 @@ If you want to create a new project, then method 1 should be used.
 |:--:|:--:|:--:|
 | ![](screenshots/screenshot_step_15.png) | ![](screenshots/screenshot_step_16.png) | ![](screenshots/screenshot_step_17.png) |
 8. After step 7 is done, something will be added into the myapp.pro file automaticly, run qmake again.
-![](screenshots/screenshot_step_19.png) 
-8. Use class "CFramelessWindow" as the base mainwindow class instead of QMainWindow.
 ![](screenshots/screenshot_step_18.png) 
+8. Use class "CFramelessWindow" as the base mainwindow class instead of QMainWindow.
+![](screenshots/screenshot_step_19.png) 
 
 ## Method 2
 If you already have a project say myproject.pro, then method 2 should be used.
