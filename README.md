@@ -44,9 +44,34 @@ If you want to create a new project, then method 1 should be used.
 
 ## Method 2
 If you already have a project say myproject.pro, then method 2 should be used.
-1. Copy folder "framelesswindow" and "projectinclude" to myproject path.
-2. Add "INCLUDEPATH += $$PWD/framelesswindow" and "DEPENDPATH += $$PWD/framelesswindow" in myproject.pro.
+1. Copy file "framelesswindow.h" and "framelesswindow.cpp" and "framelesswindow.mm" to myproject path.
+![](screenshots/screenshot_step_20.png) 
+2. Add this lines to myproject.pro, then run qmake.
+```
+HEADERS += \
+    framelesswindow.h
+
+win32{
+	SOURCES += \
+		framelesswindow.cpp
+}
+macx{
+    OBJECTIVE_SOURCES += \
+		framelesswindow.mm
+    LIBS += -framework Cocoa
+}
+```
 3. Use class "CFramelessWindow" as the base mainwindow class instead of QMainWindow.
+| 1 | 2 |
+|:-------------:|:-------------:|
+| ![](screenshots/screenshot_step_21.png) | ![](screenshots/screenshot_step_22.png) |
+
+# Windows Specific
+- TODO
+
+# OS X Specific
+- TODO
+
 
 # Platform
 - Tested with Qt5.9.2.
