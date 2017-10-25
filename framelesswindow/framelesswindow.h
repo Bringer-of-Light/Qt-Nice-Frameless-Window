@@ -68,6 +68,10 @@ public:
 private:
     void initUI();
 public:
+    //设置可拖动区域的高度，在此区域内，可以通过鼠标拖动窗口, 0表示整个窗口都可拖动
+    //In draggable area, window can be moved by mouse, (height = 0) means that the whole window is draggable
+    void setDraggableAreaHeight(int height = 0);
+
     //只有OS X10.10及以后系统，才支持OS X原生样式包括：三个系统按钮、窗口圆角、窗口阴影
     //类初始化完成后，可以通过此函数查看是否已经启用了原生样式。如果未启动，需要自定义关闭按钮、最小化按钮、最大化按钮
     //Native style（three system button/ round corner/ drop shadow） works only on OS X 10.10 or later
@@ -102,6 +106,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 private:
+    int m_draggableHeight;
     bool    m_bWinMoving;
     bool    m_bMousePressed;
     QPoint  m_MousePos;

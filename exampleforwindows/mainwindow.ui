@@ -54,6 +54,12 @@ background-color: rgb(200, 200,200);
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QLabel" name="labelTitleText">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="styleSheet">
             <string notr="true">background-color: rgb(164, 220, 129);</string>
            </property>
@@ -68,11 +74,11 @@ background-color: rgb(200, 200,200);
             <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeType">
-            <enum>QSizePolicy::Expanding</enum>
+            <enum>QSizePolicy::MinimumExpanding</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>40</width>
+             <width>100</width>
              <height>20</height>
             </size>
            </property>
@@ -80,6 +86,12 @@ background-color: rgb(200, 200,200);
          </item>
          <item>
           <widget class="QPushButton" name="bthFull">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>Full Screen</string>
            </property>
@@ -88,14 +100,20 @@ background-color: rgb(200, 200,200);
          <item>
           <widget class="QPushButton" name="btnMin">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="maximumSize">
             <size>
-             <width>40</width>
+             <width>16777215</width>
              <height>16777215</height>
             </size>
            </property>
@@ -107,14 +125,14 @@ background-color: rgb(200, 200,200);
          <item>
           <widget class="QPushButton" name="btnMax">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="maximumSize">
             <size>
-             <width>40</width>
+             <width>16777215</width>
              <height>16777215</height>
             </size>
            </property>
@@ -126,14 +144,14 @@ background-color: rgb(200, 200,200);
          <item>
           <widget class="QPushButton" name="btnClose">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="maximumSize">
             <size>
-             <width>40</width>
+             <width>16777215</width>
              <height>16777215</height>
             </size>
            </property>

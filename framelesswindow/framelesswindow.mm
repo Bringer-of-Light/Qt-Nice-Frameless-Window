@@ -5,6 +5,7 @@
 
 CFramelessWindow::CFramelessWindow(QWidget *parent)
     : QMainWindow(parent),
+      m_draggableHeight(0),
       m_bWinMoving(false),
       m_bMousePressed(false),
       m_bCloseBtnQuit(true),
@@ -147,56 +148,48 @@ void CFramelessWindow::setZoomBtnEnabled(bool bEnable)
     }
 }
 
+void CFramelessWindow::setDraggableAreaHeight(int height)
+{
+    if (height < 0) height = 0;
+    m_draggableHeight = height;
+}
+
 void CFramelessWindow::mousePressEvent(QMouseEvent *event)
 {
-    if (isMaximized())
+    if ((event->button() != Qt::LeftButton) || isMaximized() )
     {
-        QMainWindow::mousePressEvent(event);
-        return;
+        return QMainWindow::mousePressEvent(event);
     }
+
+    int height = size().height();
+    if (m_draggableHeight > 0) height = m_draggableHeight;
     QRect rc;
-    rc.setRect(0,0,size().width(), size().height());
+    rc.setRect(0,0,size().width(), height);
     if(rc.contains(this->mapFromGlobal(QCursor::pos()))==true)//如果按下的位置
     {
-        if (event->button() == Qt::LeftButton)
-        {
-            m_WindowPos = this->pos();
-            m_MousePos = event->globalPos();
-            this->m_bMousePressed = true;
-            event->accept();
-            return;
-        }
+        m_WindowPos = this->pos();
+        m_MousePos = event->globalPos();
+        m_bMousePressed = true;
     }
-    QMainWindow::mousePressEvent(event);
-    return;
+    return QMainWindow::mousePressEvent(event);
 }
 
 void CFramelessWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     m_bWinMoving = false;
-    if (isMaximized())
+    if ((event->button() == Qt::LeftButton))
     {
-        return QMainWindow::mouseReleaseEvent(event);
+        m_bMousePressed = false;
     }
-    if (event->button() == Qt::LeftButton)
-    {
-        this->m_bMousePressed = false;
-        event->accept();
-        return;
-    }
-    QMainWindow::mouseReleaseEvent(event);
+    return QMainWindow::mouseReleaseEvent(event);
 }
 
 void CFramelessWindow::mouseMoveEvent(QMouseEvent *event)
 {
-    if (m_bMousePressed)
-    {
-        m_bWinMoving = true;
-        this->move(m_WindowPos + (event->globalPos() - m_MousePos));
-        event->accept();
-        return;
-    }
-    QMainWindow::mouseMoveEvent(event);
+    if (!m_bMousePressed) return QMainWindow::mouseMoveEvent(event);
+    m_bWinMoving = true;
+    this->move(m_WindowPos + (event->globalPos() - m_MousePos));
+    return QMainWindow::mouseMoveEvent(event);
 }
 
 void CFramelessWindow::resizeEvent(QResizeEvent *event)
