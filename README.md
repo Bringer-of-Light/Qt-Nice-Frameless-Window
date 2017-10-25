@@ -72,7 +72,7 @@ macx{
 
 - Widget "titlebar" may has its own child widget, such as "close button" and "max button", and we can NOT move the window with "close button", which is what we want. However, a label widget "label1" on "titlebar" should not cover the moveable functionality, the protected member function **```addIgnoreWidget(QWidget* widget)```** is designed to deal with this kind of situation, just call **```addIgnoreWidget(ui->label1)```** in MainWindow's Constructor.
 
-- **```setResizeableAreaWidth(int width = 5)```** can set width of an invisible border aera border, inside this aera, window can be resized by mouse.
+- **```setResizeableAreaWidth(int width = 5)```** can set width of an invisible border aera, inside this aera, window can be resized by mouse.
 
 - By default, class CFramelessWindow will autoadjust window margins to avoid an annoying issue: The frameless window will extend OUT of the screen when it's in maximized state, because the OS believe that it still have border. When we maximize the window, OS will make the border invisible, and maximize the content aera to display more info.
 
