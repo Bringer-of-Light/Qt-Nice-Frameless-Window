@@ -51,9 +51,9 @@ void CFramelessWindow::setResizeableAreaWidth(int width)
     m_borderWidth = width;
 }
 
-void CFramelessWindow::setAutoAdjustMargins(bool bAutoAdust)
+void CFramelessWindow::setAutoAdjustMargins(bool bAutoAdjust)
 {
-    m_bAutoAdjustMargin = bAutoAdust;
+    m_bAutoAdjustMargin = bAutoAdjust;
 }
 
 void CFramelessWindow::setTitleBar(QWidget* titlebar)

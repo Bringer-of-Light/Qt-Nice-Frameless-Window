@@ -8,7 +8,7 @@ Qt Frameless Window for both Windows and OS X, support Aero Snap, drop shadow on
 
 
 # How to use
-Just use class "CFramelessWindow" as the base mainwindow class instead of QMainWindow, and Enjoy!
+Just use class "CFramelessWindow" as the base class instead of QMainWindow, and Enjoy!
 
 ## Method 1
 If you want to create a new project, then method 1 should be used.   
@@ -39,14 +39,14 @@ If you want to create a new project, then method 1 should be used.
 | ![](screenshots/screenshot_step_15.png) | ![](screenshots/screenshot_step_16.png) | ![](screenshots/screenshot_step_17.png) |
 8. After step 7 is done, something will be added into the myapp.pro file automaticly, run qmake again.
 ![](screenshots/screenshot_step_19.png) 
-8. Use class "CFramelessWindow" as the base mainwindow class instead of QMainWindow.
+8. Use class "CFramelessWindow" as the base class instead of QMainWindow.
 ![](screenshots/screenshot_step_18.png) 
 
 ## Method 2
 If you already have a project say myproject.pro, then method 2 should be used.
 1. Copy file "framelesswindow.h" and "framelesswindow.cpp" and "framelesswindow.mm" to myproject path.
 ![](screenshots/screenshot_step_20.png) 
-2. Add this lines to myproject.pro, then run qmake.
+2. Add these lines to myproject.pro, then run qmake.
 ```
 HEADERS += \
     framelesswindow.h
@@ -61,14 +61,21 @@ macx{
     LIBS += -framework Cocoa
 }
 ```
-3. Use class "CFramelessWindow" as the base mainwindow class instead of QMainWindow.
+3. Use class "CFramelessWindow" as the base class instead of QMainWindow.
 
 | 1 | 2 |
 |:-------------:|:-------------:|
 | ![](screenshots/screenshot_step_21.png) | ![](screenshots/screenshot_step_22.png) |
 
 # Windows Specific
-- TODO
+- The window have no title bar by default, so we can not move the window around with mouse. Inorder to make the window moveable, protected member function ``` setTitleBar(QWidget* titlebar) ``` should be called in the MainWindow's Constructor, the widget "titlebar" should be a child widget of MainWindow, and it will act exactly same as SYSTEM Title Bar.
+
+- Widget "titlebar" may has its own child widget, such as "close button" and "max button", and we can NOT move the window with "close button", which is what we want. However, a label widget "label1" on "titlebar" should not cover the moveable functionality, the protected member function ```addIgnoreWidget(QWidget* widget)``` is designed to deal with this kind of situation, just call ```addIgnoreWidget(ui->label1)``` in MainWindow's Constructor.
+
+- ```setResizeableAreaWidth(int width = 5)``` can set width of an invisible border aera border, inside this aera, window can be resized by mouse.
+
+- By default, class CFramelessWindow will autoadjust window margins to avoid an annoying issue:  *The frameless window will extend OUT of the screen when it's in maximized state, because the OS believe that it still have border. When we maximize the window, OS will make the border invisible, and maximize the content aera to display more info. *   
+The side-effect of "Auto Adjust Margins" is that when the window restore to normal size, a twinkle will occur. If we really don't like the twinkle, use ```setAutoAdjustMargins(false)```. But we'd better reserve enough blank area with ```setContentsMargins(false)```.
 
 # OS X Specific
 - TODO
@@ -76,4 +83,4 @@ macx{
 
 # Platform
 - Tested with Qt5.9.2.
-- Tested on Windows 7 and OS X 10.10.2.
+- Tested on Windows 7 (with visual studio 2015) and OS X 10.10.2.

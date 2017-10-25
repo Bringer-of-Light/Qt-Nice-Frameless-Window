@@ -1,6 +1,7 @@
 #common
 *.user
 build*/
+*.autosave
 
 #mac
 .DS_Store
