@@ -68,14 +68,15 @@ macx{
 | ![](screenshots/screenshot_step_21.png) | ![](screenshots/screenshot_step_22.png) |
 
 # Windows Specific
-- The window have no title bar by default, so we can not move the window around with mouse. Inorder to make the window moveable, protected member function ``` setTitleBar(QWidget* titlebar) ``` should be called in the MainWindow's Constructor, the widget "titlebar" should be a child widget of MainWindow, and it will act exactly same as SYSTEM Title Bar.
+- The window have no title bar by default, so we can not move the window around with mouse. Inorder to make the window moveable, protected member function **``` setTitleBar(QWidget* titlebar) ```** should be called in the MainWindow's Constructor, the widget "titlebar" should be a child widget of MainWindow, and it will act exactly same as SYSTEM Title Bar.
 
-- Widget "titlebar" may has its own child widget, such as "close button" and "max button", and we can NOT move the window with "close button", which is what we want. However, a label widget "label1" on "titlebar" should not cover the moveable functionality, the protected member function ```addIgnoreWidget(QWidget* widget)``` is designed to deal with this kind of situation, just call ```addIgnoreWidget(ui->label1)``` in MainWindow's Constructor.
+- Widget "titlebar" may has its own child widget, such as "close button" and "max button", and we can NOT move the window with "close button", which is what we want. However, a label widget "label1" on "titlebar" should not cover the moveable functionality, the protected member function **```addIgnoreWidget(QWidget* widget)```** is designed to deal with this kind of situation, just call **```addIgnoreWidget(ui->label1)```** in MainWindow's Constructor.
 
-- ```setResizeableAreaWidth(int width = 5)``` can set width of an invisible border aera border, inside this aera, window can be resized by mouse.
+- **```setResizeableAreaWidth(int width = 5)```** can set width of an invisible border aera border, inside this aera, window can be resized by mouse.
 
-- By default, class CFramelessWindow will autoadjust window margins to avoid an annoying issue:  *The frameless window will extend OUT of the screen when it's in maximized state, because the OS believe that it still have border. When we maximize the window, OS will make the border invisible, and maximize the content aera to display more info. *   
-The side-effect of "Auto Adjust Margins" is that when the window restore to normal size, a twinkle will occur. If we really don't like the twinkle, use ```setAutoAdjustMargins(false)```. But we'd better reserve enough blank area with ```setContentsMargins(false)```.
+- By default, class CFramelessWindow will autoadjust window margins to avoid an annoying issue: The frameless window will extend OUT of the screen when it's in maximized state, because the OS believe that it still have border. When we maximize the window, OS will make the border invisible, and maximize the content aera to display more info.
+
+- The side-effect of "Auto Adjust Margins" is that when the window restore to normal size, a twinkle will occur. If we really don't like the twinkle, use **```setAutoAdjustMargins(false)```**. But we'd better reserve enough blank area with **```setContentsMargins(false)```**.
 
 # OS X Specific
 - TODO
