@@ -78,10 +78,22 @@ macx{
 
 - The side-effect of "Auto Adjust Margins" is that when the window restore to normal size, a twinkle will occur. If we really don't like the twinkle, use **```setAutoAdjustMargins(false)```**. But we'd better reserve enough blank area with **```setContentsMargins(false)```**.
 
+- Exampleforwindows shows the general usage.
+
 # OS X Specific
-- TODO
+- The whole window is draggable by default. **``` setDraggableAreaHeight(int height) ```** can set the draggable area height, in draggable area, window can be moved by mouse, (height = 0) means that the whole window is draggable.
+
+- Native style（three system button/ round corner/ drop shadow） works only on OS X 10.10 and later. If **``` isNativeStyleOK() ```** return false, we should implement three custom button(close/ min/ max).
+
+- If Native style is OK, three system button is provided by OS X. On OS X 10.10 and later, the default behavior of Zoom Button(Green Button) is to FullScreen the window, and this will cause some anoying issue: when the window returns to normal size from fullscreen state, the System Title Bar show again! As a result, CFramelessWindow override the behavior of Zoom Button to Maximized (Not FullScreen) the window.
+
+- If Native style is OK, the default behavior of close button is to quit the application. If we want to hide the app instead of quit, use **``` setCloseBtnQuit(false) ```**. Be carefull that after set this to false, we can NOT revert it to true again! And this funciton should NOT be called more than once!
+
+- If Native style is OK, all there system button can be disabled by **``` setCloseBtnEnabled(false) ```**, **``` setMinBtnEnabled(false) ```**, **``` setZoomBtnEnabled(false) ```**.
+
+- Exampleformac shows the general usage.
 
 
 # Platform
 - Tested with Qt5.9.2.
-- Tested on Windows 7 (with visual studio 2015) and OS X 10.10.2.
+- Tested on Windows 7 (with visual studio 2015) , Windows 10 (with visual studio 2015), OS X 10.10.2.
