@@ -27,7 +27,7 @@ void CFramelessWindow::initUI()
     //此行代码隐藏边框和标题栏，但同时也失去了Aero效果、窗口阴影等
     //
     //this line hide the frame and titlebar of window, but we lose Aero effect too
-    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
 
     //此行代码可以带回Aero效果，同时也带回了标题栏和边框
     //
