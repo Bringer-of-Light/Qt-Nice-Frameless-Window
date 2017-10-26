@@ -10,9 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //feel free to change this number to see how it works
     setResizeableAreaWidth(8);
 
-    //feel free to change this to true or false, and maximized the window to see how it works
-    //setAutoAdjustMargins(false);
-
     //set titlebar widget, wo we can drag MainWindow by it
     setTitleBar(ui->widgetTitlebar);
 

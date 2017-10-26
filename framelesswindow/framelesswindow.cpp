@@ -17,7 +17,6 @@
 CFramelessWindow::CFramelessWindow(QWidget *parent)
     : QMainWindow(parent),
       m_titlebar(Q_NULLPTR),
-      m_bAutoAdjustMargin(true),
       m_borderWidth(5)
 {
     initUI();
@@ -49,11 +48,6 @@ void CFramelessWindow::setResizeableAreaWidth(int width)
 {
     if (1 > width) width = 1;
     m_borderWidth = width;
-}
-
-void CFramelessWindow::setAutoAdjustMargins(bool bAutoAdjust)
-{
-    m_bAutoAdjustMargin = bAutoAdjust;
 }
 
 void CFramelessWindow::setTitleBar(QWidget* titlebar)
@@ -182,8 +176,6 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
     } //end case WM_NCHITTEST
     case WM_GETMINMAXINFO:
     {
-        if (!m_bAutoAdjustMargin) return true;
-
         if (::IsZoomed(msg->hwnd)) {
             RECT frame = { 0, 0, 0, 0 };
             AdjustWindowRectEx(&frame, WS_OVERLAPPEDWINDOW, FALSE, 0);
@@ -193,13 +185,11 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
                                             frame.top+m_margins.top(), \
                                             frame.right+m_margins.right(), \
                                             frame.bottom+m_margins.bottom());
-        }
-        else {
+        }else {
             QMainWindow::setContentsMargins(m_margins);
+            repaint();
         }
-
-        *result = ::DefWindowProc(msg->hwnd, msg->message, msg->wParam, msg->lParam);
-        return true;
+        return false;
     }
     default:
         return QMainWindow::nativeEvent(eventType, message, result);

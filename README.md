@@ -76,10 +76,6 @@ macx{
 
 - **```setResizeableAreaWidth(int width = 5)```** can set width of an invisible border aera, inside this aera, window can be resized by mouse.
 
-- By default, class CFramelessWindow will autoadjust window margins to avoid an annoying issue: The frameless window will extend OUT of the screen when it's in maximized state, because the OS believe that it still have border. When we maximize the window, OS will make the border invisible, and maximize the content aera to display more info.
-
-- The side-effect of "Auto Adjust Margins" is that when the window restore to normal size, a twinkle will occur. If we really don't like the twinkle, use **```setAutoAdjustMargins(false)```**. But we'd better reserve enough blank area with **```setContentsMargins(false)```**.
-
 - Exampleforwindows shows the general usage.
 
 # OS X Specific
