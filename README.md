@@ -95,3 +95,8 @@ macx{
 # Platform
 - Tested with Qt5.9.2.
 - Tested on Windows 7 (with visual studio 2015) , Windows 10 (with visual studio 2015), OS X 10.10.2.
+
+# Acknowledge
+- [Mixing cocoa and qt](https://el-tramo.be/blog/mixing-cocoa-and-qt/)
+- [Mixing Objective-C, C++ and Objective-C++: an Updated Summary](http://philjordan.eu/article/mixing-objective-c-c++-and-objective-c++)
+- [objective c - Setting C function as selector for NSButton produces no results - Stack Overflow](https://stackoverflow.com/questions/27643659/setting-c-function-as-selector-for-nsbutton-produces-no-results)
