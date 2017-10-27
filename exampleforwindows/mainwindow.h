@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "framelesswindow.h"
+#include <QString>
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,10 @@ private slots:
     void on_btnMax_clicked();
     void on_btnClose_clicked();
     void on_bthFull_clicked();
+    void on_btnIncreaseMargin_clicked();
+    void on_btnDecreaseMargin_clicked();
+private:
+    QString currentMargins();
 private:
     Ui::MainWindow *ui;
 };

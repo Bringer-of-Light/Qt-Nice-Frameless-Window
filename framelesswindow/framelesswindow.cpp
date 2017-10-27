@@ -17,7 +17,8 @@
 CFramelessWindow::CFramelessWindow(QWidget *parent)
     : QMainWindow(parent),
       m_titlebar(Q_NULLPTR),
-      m_borderWidth(5)
+      m_borderWidth(5),
+      m_bJustMaximized(false)
 {
     initUI();
 }
@@ -27,7 +28,7 @@ void CFramelessWindow::initUI()
     //此行代码隐藏边框和标题栏，但同时也失去了Aero效果、窗口阴影等
     //
     //this line hide the frame and titlebar of window, but we lose Aero effect too
-    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
+    setWindowFlags(Qt::FramelessWindowHint);
 
     //此行代码可以带回Aero效果，同时也带回了标题栏和边框
     //
@@ -181,13 +182,26 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
             AdjustWindowRectEx(&frame, WS_OVERLAPPEDWINDOW, FALSE, 0);
             frame.left = abs(frame.left);
             frame.top = abs(frame.bottom);
+
+            //record frame area data
+            m_frames.setLeft(frame.left);
+            m_frames.setTop(frame.top);
+            m_frames.setRight(frame.bottom);
+            m_frames.setBottom(frame.bottom);
+
             QMainWindow::setContentsMargins(frame.left+m_margins.left(), \
                                             frame.top+m_margins.top(), \
                                             frame.right+m_margins.right(), \
                                             frame.bottom+m_margins.bottom());
+            m_bJustMaximized = true;
         }else {
-            QMainWindow::setContentsMargins(m_margins);
-            repaint();
+            if (m_bJustMaximized)
+            {
+                QMainWindow::setContentsMargins(m_margins);
+                repaint();
+                m_frames = QMargins();
+                m_bJustMaximized = false;
+            }
         }
         return false;
     }
@@ -198,16 +212,53 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
 
 void CFramelessWindow::setContentsMargins(const QMargins &margins)
 {
-    QMainWindow::setContentsMargins(margins);
+    QMainWindow::setContentsMargins(margins+m_frames);
     m_margins = margins;
 }
-
 void CFramelessWindow::setContentsMargins(int left, int top, int right, int bottom)
 {
-    QMainWindow::setContentsMargins(left, top, right, bottom);
+    QMainWindow::setContentsMargins(left+m_frames.left(),\
+                                    top+m_frames.top(), \
+                                    right+m_frames.right(), \
+                                    bottom+m_frames.bottom());
     m_margins.setLeft(left);
     m_margins.setTop(top);
     m_margins.setRight(right);
     m_margins.setBottom(bottom);
 }
+QMargins CFramelessWindow::contentsMargins() const
+{
+    QMargins margins = QMainWindow::contentsMargins();
+    margins -= m_frames;
+    return margins;
+}
+void CFramelessWindow::getContentsMargins(int *left, int *top, int *right, int *bottom) const
+{
+    QMainWindow::getContentsMargins(left,top,right,bottom);
+    if (!(left&&top&&right&&bottom)) return;
+    if (isMaximized())
+    {
+        *left -= m_frames.left();
+        *top -= m_frames.top();
+        *right -= m_frames.right();
+        *bottom -= m_frames.bottom();
+    }
+}
+QRect CFramelessWindow::contentsRect() const
+{
+    QRect rect = QMainWindow::contentsRect();
+    rect.setLeft(rect.left() - m_frames.left());
+    rect.setTop(rect.top() - m_frames.top());
+    return rect;
+}
+void CFramelessWindow::showFullScreen()
+{
+    if (isMaximized())
+    {
+        QMainWindow::setContentsMargins(m_margins);
+        m_frames = QMargins();
+    }
+    QMainWindow::showFullScreen();
+}
+
 #endif //Q_OS_WIN

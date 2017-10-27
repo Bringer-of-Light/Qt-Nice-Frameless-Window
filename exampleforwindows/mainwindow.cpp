@@ -1,5 +1,6 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QRect>
 
 MainWindow::MainWindow(QWidget *parent) :
     CFramelessWindow(parent),
@@ -20,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //further more, btnMin/btnMax... are child widgets of widgetTitlebar too
     //but we DO NOT want to drag MainWindow by them
 #endif
+
+    ui->labelMargins->setText(currentMargins());
 }
 
 MainWindow::~MainWindow()
@@ -45,4 +48,26 @@ void MainWindow::on_bthFull_clicked()
 {
     if (isFullScreen()) showNormal();
     else showFullScreen();
+}
+
+void MainWindow::on_btnIncreaseMargin_clicked()
+{
+    QMargins margin = contentsMargins();
+    margin += 2;
+    setContentsMargins(margin);
+    ui->labelMargins->setText(currentMargins());
+}
+
+void MainWindow::on_btnDecreaseMargin_clicked()
+{
+    QMargins margin = contentsMargins();
+    margin -= 2;
+    setContentsMargins(margin);
+    ui->labelMargins->setText(currentMargins());
+}
+
+QString MainWindow::currentMargins()
+{
+    QMargins margins = contentsMargins();
+    return QString("left:%1,top:%2.").arg(margins.left()).arg(margins.top());
 }

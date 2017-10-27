@@ -12,6 +12,7 @@
 #include <QWidget>
 #include <QList>
 #include <QMargins>
+#include <QRect>
 class CFramelessWindow : public QMainWindow
 {
     Q_OBJECT
@@ -41,11 +42,19 @@ private slots:
 public:
     void setContentsMargins(const QMargins &margins);
     void setContentsMargins(int left, int top, int right, int bottom);
+    QMargins contentsMargins() const;
+    QRect contentsRect() const;
+    void getContentsMargins(int *left, int *top, int *right, int *bottom) const;
+public slots:
+    void showFullScreen();
 private:
     QWidget* m_titlebar;
     QList<QWidget*> m_whiteList;
-    QMargins m_margins;
     int m_borderWidth;
+
+    QMargins m_margins;
+    QMargins m_frames;
+    bool m_bJustMaximized;
 };
 
 #elif defined Q_OS_MAC
