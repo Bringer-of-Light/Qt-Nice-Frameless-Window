@@ -196,6 +196,9 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
             if (m_bJustMaximized)
             {
                 QMainWindow::setContentsMargins(m_margins);
+                //after window back to normal size from maximized state
+                //a twinkle will happen, to avoid this twinkle
+                //repaint() is important used just before the window back to normal
                 repaint();
                 m_frames = QMargins();
                 m_bJustMaximized = false;
