@@ -69,5 +69,10 @@ void MainWindow::on_btnDecreaseMargin_clicked()
 QString MainWindow::currentMargins()
 {
     QMargins margins = contentsMargins();
-    return QString("left:%1,top:%2.").arg(margins.left()).arg(margins.top());
+    QRect rect = contentsRect();
+    return QString("Current Margins:%1,%2,%3,%4; ContentRect:%5,%6,%7,%8").\
+            arg(margins.left()).arg(margins.top()).\
+            arg(margins.right()).arg(margins.bottom()).\
+            arg(rect.left()).arg(rect.top()).\
+            arg(rect.right()).arg(rect.bottom());
 }

@@ -180,19 +180,17 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
         if (::IsZoomed(msg->hwnd)) {
             RECT frame = { 0, 0, 0, 0 };
             AdjustWindowRectEx(&frame, WS_OVERLAPPEDWINDOW, FALSE, 0);
-            frame.left = abs(frame.left);
-            frame.top = abs(frame.bottom);
 
             //record frame area data
-            m_frames.setLeft(frame.left);
-            m_frames.setTop(frame.top);
-            m_frames.setRight(frame.bottom);
-            m_frames.setBottom(frame.bottom);
+            m_frames.setLeft(abs(frame.left));
+            m_frames.setTop(abs(frame.bottom));
+            m_frames.setRight(abs(frame.right));
+            m_frames.setBottom(abs(frame.bottom));
 
-            QMainWindow::setContentsMargins(frame.left+m_margins.left(), \
-                                            frame.top+m_margins.top(), \
-                                            frame.right+m_margins.right(), \
-                                            frame.bottom+m_margins.bottom());
+            QMainWindow::setContentsMargins(m_frames.left()+m_margins.left(), \
+                                            m_frames.top()+m_margins.top(), \
+                                            m_frames.right()+m_margins.right(), \
+                                            m_frames.bottom()+m_margins.bottom());
             m_bJustMaximized = true;
         }else {
             if (m_bJustMaximized)
@@ -247,8 +245,12 @@ void CFramelessWindow::getContentsMargins(int *left, int *top, int *right, int *
 QRect CFramelessWindow::contentsRect() const
 {
     QRect rect = QMainWindow::contentsRect();
+    int width = rect.width();
+    int height = rect.height();
     rect.setLeft(rect.left() - m_frames.left());
     rect.setTop(rect.top() - m_frames.top());
+    rect.setWidth(width);
+    rect.setHeight(height);
     return rect;
 }
 void CFramelessWindow::showFullScreen()
