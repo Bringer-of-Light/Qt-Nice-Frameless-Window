@@ -82,6 +82,8 @@ macx{
 
 - Exampleforwindows shows the general usage.
 
+- **WARNING**: resize()/geometry()/setGeometry()/frameGeometry()/frameSize()/x()/y()/.etc function will not works right when the Window is Maximized, try not to use any of these function when the Window is Maximized (If you really want to fix these bugs, feel free to contact [Bringer-of-Light](https://github.com/Bringer-of-Light)) . But these function setContentsMargins()/contentsMargins()/getContentsMargins/contentsRect() can always works right, so you can use them anytime. Generally , it's always a good idea to use Qt Layout Management System instead of hard-code layout Management to avoid potential size-like/pos-like issue. 
+
 # OS X Specific
 - The whole window is draggable by default. **``` setDraggableAreaHeight(int height) ```** can set the draggable area height, in draggable area, window can be moved by mouse, (height = 0) means that the whole window is draggable.
 
