@@ -22,7 +22,7 @@ CFramelessWindow::CFramelessWindow(QWidget *parent)
       m_bResizeable(true)
 {
     setWindowFlag(Qt::Window,true);
-//    setWindowFlag(Qt::FramelessWindowHint, true);
+    setWindowFlag(Qt::FramelessWindowHint, true);
     setWindowFlag(Qt::WindowSystemMenuHint, true);
 
     setResizeable(m_bResizeable);
