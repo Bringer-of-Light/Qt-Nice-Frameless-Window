@@ -203,10 +203,10 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
             //record frame area data
             double dpr = this->devicePixelRatioF();
 
-            m_frames.setLeft(abs(frame.left)/dpr+0.5);
-            m_frames.setTop(abs(frame.bottom)/dpr+0.5);
-            m_frames.setRight(abs(frame.right)/dpr+0.5);
-            m_frames.setBottom(abs(frame.bottom)/dpr+0.5);
+            m_frames.setLeft(abs(frame.left)/dpr);
+            m_frames.setTop(abs(frame.bottom)/dpr);
+            m_frames.setRight(abs(frame.right)/dpr);
+            m_frames.setBottom(abs(frame.bottom)/dpr);
 
             QMainWindow::setContentsMargins(m_frames.left()+m_margins.left(), \
                                             m_frames.top()+m_margins.top(), \
