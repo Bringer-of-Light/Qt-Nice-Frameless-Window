@@ -157,8 +157,9 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
         if(*result==0)
         {
             if (!m_titlebar) return false;
+
             //support highdpi
-            double dpr = m_titlebar->devicePixelRatioF();
+            double dpr = this->devicePixelRatioF();
             QPoint pos = m_titlebar->mapFromGlobal(QPoint(x/dpr,y/dpr));
 
             if (!m_titlebar->rect().contains(pos)) return false;
@@ -185,10 +186,12 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
             AdjustWindowRectEx(&frame, WS_OVERLAPPEDWINDOW, FALSE, 0);
 
             //record frame area data
-            m_frames.setLeft(abs(frame.left));
-            m_frames.setTop(abs(frame.bottom));
-            m_frames.setRight(abs(frame.right));
-            m_frames.setBottom(abs(frame.bottom));
+            double dpr = this->devicePixelRatioF();
+
+            m_frames.setLeft(abs(frame.left)/dpr+0.5);
+            m_frames.setTop(abs(frame.bottom)/dpr+0.5);
+            m_frames.setRight(abs(frame.right)/dpr+0.5);
+            m_frames.setBottom(abs(frame.bottom)/dpr+0.5);
 
             QMainWindow::setContentsMargins(m_frames.left()+m_margins.left(), \
                                             m_frames.top()+m_margins.top(), \
