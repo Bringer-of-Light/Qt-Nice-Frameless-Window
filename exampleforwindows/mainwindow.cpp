@@ -1,6 +1,7 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QRect>
+#include "framelesshelper.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     CFramelessWindow(parent),
@@ -80,4 +81,19 @@ QString MainWindow::currentMargins()
 void MainWindow::on_btnResizeable_clicked()
 {
     setResizeable(!isResizeable());
+}
+
+void MainWindow::on_btnSubWindow_clicked()
+{
+    QWidget * subWin = new QWidget(this);
+    FramelessHelper * fl = new FramelessHelper(subWin);
+
+    subWin->setAttribute(Qt::WA_DeleteOnClose);
+    subWin->setWindowFlag(Qt::Window,true);
+
+    QPushButton* btn = new QPushButton(subWin);
+    btn->move(0,0);
+
+    subWin->resize(500,400);
+    subWin->show();
 }

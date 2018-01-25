@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
-HEADERS  += mainwindow.h
+        mainwindow.cpp \
+    framelesshelper.cpp
+HEADERS  += mainwindow.h \
+    framelesshelper.h
 FORMS    += mainwindow.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../framelesswindow/release/ -lframelesswindow

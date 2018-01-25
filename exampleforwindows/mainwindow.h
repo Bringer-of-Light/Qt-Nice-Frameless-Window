@@ -25,6 +25,8 @@ private slots:
     void on_btnDecreaseMargin_clicked();
     void on_btnResizeable_clicked();
 
+    void on_btnSubWindow_clicked();
+
 private:
     QString currentMargins();
 private:

@@ -200,6 +200,13 @@ background-color: rgb(200, 200,200);
         </property>
        </spacer>
       </item>
+      <item>
+       <widget class="QPushButton" name="btnSubWindow">
+        <property name="text">
+         <string>Create SubWindow</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item>
