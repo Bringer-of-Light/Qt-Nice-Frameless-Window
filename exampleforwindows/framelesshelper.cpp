@@ -5,13 +5,13 @@ FramelessHelper::FramelessHelper(QWidget *target) :
     _target(target),
     _cursorchanged(false),
     _leftButtonPressed(false),
-    _borderWidth(5),
+    _borderWidth(4),
     _dragPos(QPoint())
 {
     if (_target){
         _target->setMouseTracking(true);
         _target->setWindowFlags(_target->windowFlags() | Qt::FramelessWindowHint);
-//        _target->setAttribute(Qt::WA_Hover);
+        _target->setAttribute(Qt::WA_Hover);
         _target->installEventFilter(this);
     }
     _rubberband = new QRubberBand(QRubberBand::Rectangle);
@@ -22,7 +22,8 @@ bool FramelessHelper::eventFilter(QObject *o, QEvent*e) {
             e->type() == QEvent::HoverMove ||
             e->type() == QEvent::Leave ||
             e->type() == QEvent::MouseButtonPress ||
-            e->type() == QEvent::MouseButtonRelease) {
+            e->type() == QEvent::MouseButtonRelease ||
+            e->type() == QEvent::MouseButtonDblClick) {
 
         switch (e->type()) {
         case QEvent::MouseMove:
@@ -43,6 +44,10 @@ bool FramelessHelper::eventFilter(QObject *o, QEvent*e) {
             break;
         case QEvent::MouseButtonRelease:
             mouseRealese(static_cast<QMouseEvent*>(e));
+            return true;
+            break;
+        case QEvent::MouseButtonDblClick:
+            mouseDoubleClick(static_cast<QMouseEvent*>(e));
             return true;
             break;
         default:
@@ -86,12 +91,25 @@ void FramelessHelper::mouseRealese(QMouseEvent *e) {
     }
 }
 
+void FramelessHelper::mouseDoubleClick(QMouseEvent *e)
+{
+    Q_UNUSED(e);
+    if (!_mousePress.testFlag(Edge::None)) return;
+    if (!_target) return;
+    if (_target->isMaximized()){
+        _target->showNormal();
+    }else{
+        _target->showMaximized();
+    }
+}
+
 void FramelessHelper::mouseMove(QMouseEvent *e) {
+    if (_target->isMaximized()) return;
     if (_leftButtonPressed) {
         if (_dragStart) {
-            _target->move(_target->frameGeometry().topLeft() + (e->pos() - _dragPos));
+            QPoint topLeft = _target->frameGeometry().topLeft();
+            _target->move(topLeft + (e->pos()-_dragPos));
         }
-
         if (!_mousePress.testFlag(Edge::None)) {
             int left = _rubberband->frameGeometry().left();
             int top = _rubberband->frameGeometry().top();
