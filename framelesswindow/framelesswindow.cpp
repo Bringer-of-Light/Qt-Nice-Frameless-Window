@@ -157,7 +157,10 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
         if(*result==0)
         {
             if (!m_titlebar) return false;
-            QPoint pos = m_titlebar->mapFromGlobal(QPoint(x,y));
+            //support highdpi
+            double dpr = m_titlebar->devicePixelRatioF();
+            QPoint pos = m_titlebar->mapFromGlobal(QPoint(x/dpr,y/dpr));
+
             if (!m_titlebar->rect().contains(pos)) return false;
             QWidget* child = m_titlebar->childAt(pos);
             if (!child)
