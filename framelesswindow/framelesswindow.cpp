@@ -18,31 +18,45 @@ CFramelessWindow::CFramelessWindow(QWidget *parent)
     : QMainWindow(parent),
       m_titlebar(Q_NULLPTR),
       m_borderWidth(5),
-      m_bJustMaximized(false)
+      m_bJustMaximized(false),
+      m_bResizeable(true)
 {
-    initUI();
+    setWindowFlag(Qt::Window,true);
+//    setWindowFlag(Qt::FramelessWindowHint, true);
+    setWindowFlag(Qt::WindowSystemMenuHint, true);
+
+    setResizeable(m_bResizeable);
 }
 
-void CFramelessWindow::initUI()
+void CFramelessWindow::setResizeable(bool resizeable)
 {
-    //此行代码隐藏边框和标题栏，但同时也失去了Aero效果、窗口阴影等
-    //
-    //this line hide the frame and titlebar of window, but we lose Aero effect too
-    setWindowFlags(Qt::FramelessWindowHint);
+    bool visible = isVisible();
+    m_bResizeable = resizeable;
+    if (m_bResizeable){
+        setWindowFlag(Qt::WindowMaximizeButtonHint);
 
-    //此行代码可以带回Aero效果，同时也带回了标题栏和边框
-    //
-    //this line will get titlebar/thick frame/Aero back, which is exactly what we want
-    //we will get rid of titlebar and thick frame again in nativeEvent() later
-    HWND hwnd = (HWND)this->winId();
-    DWORD style = ::GetWindowLong(hwnd, GWL_STYLE);
-    ::SetWindowLong(hwnd, GWL_STYLE, style | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CAPTION);
+        //此行代码可以带回Aero效果，同时也带回了标题栏和边框,在nativeEvent()会再次去掉标题栏
+        //
+        //this line will get titlebar/thick frame/Aero back, which is exactly what we want
+        //we will get rid of titlebar and thick frame again in nativeEvent() later
+        HWND hwnd = (HWND)this->winId();
+        DWORD style = ::GetWindowLong(hwnd, GWL_STYLE);
+        ::SetWindowLong(hwnd, GWL_STYLE, style | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CAPTION);
+    }else{
+        setWindowFlag(Qt::WindowMaximizeButtonHint,false);
+
+        HWND hwnd = (HWND)this->winId();
+        DWORD style = ::GetWindowLong(hwnd, GWL_STYLE);
+        ::SetWindowLong(hwnd, GWL_STYLE, style & ~WS_MAXIMIZEBOX & ~WS_CAPTION);
+    }
 
     //保留一个像素的边框宽度，否则系统不会绘制边框阴影
     //
     //we better left 1 piexl width of border untouch, so OS can draw nice shadow around it
     const MARGINS shadow = { 1, 1, 1, 1 };
     DwmExtendFrameIntoClientArea(HWND(winId()), &shadow);
+
+    setVisible(visible);
 }
 
 void CFramelessWindow::setResizeableAreaWidth(int width)
@@ -95,89 +109,90 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
         long x = GET_X_LPARAM(msg->lParam);
         long y = GET_Y_LPARAM(msg->lParam);
 
-        bool resizeWidth = minimumWidth() != maximumWidth();
-        bool resizeHeight = minimumHeight() != maximumHeight();
+        if(m_bResizeable)
+        {
 
-        if(resizeWidth)
-        {
-            //left border
-            if (x >= winrect.left && x < winrect.left + border_width)
+            bool resizeWidth = minimumWidth() != maximumWidth();
+            bool resizeHeight = minimumHeight() != maximumHeight();
+
+            if(resizeWidth)
             {
-                *result = HTLEFT;
+                //left border
+                if (x >= winrect.left && x < winrect.left + border_width)
+                {
+                    *result = HTLEFT;
+                }
+                //right border
+                if (x < winrect.right && x >= winrect.right - border_width)
+                {
+                    *result = HTRIGHT;
+                }
             }
-            //right border
-            if (x < winrect.right && x >= winrect.right - border_width)
+            if(resizeHeight)
             {
-                *result = HTRIGHT;
+                //bottom border
+                if (y < winrect.bottom && y >= winrect.bottom - border_width)
+                {
+                    *result = HTBOTTOM;
+                }
+                //top border
+                if (y >= winrect.top && y < winrect.top + border_width)
+                {
+                    *result = HTTOP;
+                }
+            }
+            if(resizeWidth && resizeHeight)
+            {
+                //bottom left corner
+                if (x >= winrect.left && x < winrect.left + border_width &&
+                        y < winrect.bottom && y >= winrect.bottom - border_width)
+                {
+                    *result = HTBOTTOMLEFT;
+                }
+                //bottom right corner
+                if (x < winrect.right && x >= winrect.right - border_width &&
+                        y < winrect.bottom && y >= winrect.bottom - border_width)
+                {
+                    *result = HTBOTTOMRIGHT;
+                }
+                //top left corner
+                if (x >= winrect.left && x < winrect.left + border_width &&
+                        y >= winrect.top && y < winrect.top + border_width)
+                {
+                    *result = HTTOPLEFT;
+                }
+                //top right corner
+                if (x < winrect.right && x >= winrect.right - border_width &&
+                        y >= winrect.top && y < winrect.top + border_width)
+                {
+                    *result = HTTOPRIGHT;
+                }
             }
         }
-        if(resizeHeight)
-        {
-            //bottom border
-            if (y < winrect.bottom && y >= winrect.bottom - border_width)
-            {
-                *result = HTBOTTOM;
-            }
-            //top border
-            if (y >= winrect.top && y < winrect.top + border_width)
-            {
-                *result = HTTOP;
-            }
-        }
-        if(resizeWidth && resizeHeight)
-        {
-            //bottom left corner
-            if (x >= winrect.left && x < winrect.left + border_width &&
-                    y < winrect.bottom && y >= winrect.bottom - border_width)
-            {
-                *result = HTBOTTOMLEFT;
-            }
-            //bottom right corner
-            if (x < winrect.right && x >= winrect.right - border_width &&
-                    y < winrect.bottom && y >= winrect.bottom - border_width)
-            {
-                *result = HTBOTTOMRIGHT;
-            }
-            //top left corner
-            if (x >= winrect.left && x < winrect.left + border_width &&
-                    y >= winrect.top && y < winrect.top + border_width)
-            {
-                *result = HTTOPLEFT;
-            }
-            //top right corner
-            if (x < winrect.right && x >= winrect.right - border_width &&
-                    y >= winrect.top && y < winrect.top + border_width)
-            {
-                *result = HTTOPRIGHT;
-            }
-        }
+        if (0!=*result) return true;
 
         //*result still equals 0, that means the cursor locate OUTSIDE the frame area
         //but it may locate in titlebar area
-        if(*result==0)
+        if (!m_titlebar) return false;
+
+        //support highdpi
+        double dpr = this->devicePixelRatioF();
+        QPoint pos = m_titlebar->mapFromGlobal(QPoint(x/dpr,y/dpr));
+
+        if (!m_titlebar->rect().contains(pos)) return false;
+        QWidget* child = m_titlebar->childAt(pos);
+        if (!child)
         {
-            if (!m_titlebar) return false;
-
-            //support highdpi
-            double dpr = this->devicePixelRatioF();
-            QPoint pos = m_titlebar->mapFromGlobal(QPoint(x/dpr,y/dpr));
-
-            if (!m_titlebar->rect().contains(pos)) return false;
-            QWidget* child = m_titlebar->childAt(pos);
-            if (!child)
+            *result = HTCAPTION;
+            return true;
+        }else{
+            if (m_whiteList.contains(child))
             {
                 *result = HTCAPTION;
                 return true;
-            }else{
-                if (m_whiteList.contains(child))
-                {
-                    *result = HTCAPTION;
-                    return true;
-                }
-                return false;
             }
         }
-        return true;
+        return false;
     } //end case WM_NCHITTEST
     case WM_GETMINMAXINFO:
     {

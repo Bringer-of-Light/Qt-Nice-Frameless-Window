@@ -18,9 +18,14 @@ class CFramelessWindow : public QMainWindow
     Q_OBJECT
 public:
     explicit CFramelessWindow(QWidget *parent = 0);
-private:
-    void initUI();
 public:
+
+    //设置是否可以通过鼠标调整窗口大小
+    //if resizeable is set to false, then the window can not be resized by mouse
+    //but still can be resized programtically
+    void setResizeable(bool resizeable=true);
+    bool isResizeable(){return m_bResizeable;}
+
     //设置可调整大小区域的宽度，在此区域内，可以使用鼠标调整窗口大小
     //set border width, inside this aera, window can be resized by mouse
     void setResizeableAreaWidth(int width = 5);
@@ -55,6 +60,8 @@ private:
     QMargins m_margins;
     QMargins m_frames;
     bool m_bJustMaximized;
+
+    bool m_bResizeable;
 };
 
 #elif defined Q_OS_MAC

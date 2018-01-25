@@ -23,6 +23,8 @@ private slots:
     void on_bthFull_clicked();
     void on_btnIncreaseMargin_clicked();
     void on_btnDecreaseMargin_clicked();
+    void on_btnResizeable_clicked();
+
 private:
     QString currentMargins();
 private:
