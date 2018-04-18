@@ -21,9 +21,12 @@ CFramelessWindow::CFramelessWindow(QWidget *parent)
       m_bJustMaximized(false),
       m_bResizeable(true)
 {
-    setWindowFlag(Qt::Window,true);
-    setWindowFlag(Qt::FramelessWindowHint, true);
-    setWindowFlag(Qt::WindowSystemMenuHint, true);
+//    setWindowFlag(Qt::Window,true);
+//    setWindowFlag(Qt::FramelessWindowHint, true);
+//    setWindowFlag(Qt::WindowSystemMenuHint, true);
+//    setWindowFlag() is not avaliable under Qt5.9, so we should use setWindowFlags instead
+
+    setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint);
 
     setResizeable(m_bResizeable);
 }
@@ -33,7 +36,8 @@ void CFramelessWindow::setResizeable(bool resizeable)
     bool visible = isVisible();
     m_bResizeable = resizeable;
     if (m_bResizeable){
-        setWindowFlag(Qt::WindowMaximizeButtonHint);
+        setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
+//        setWindowFlag(Qt::WindowMaximizeButtonHint);
 
         //此行代码可以带回Aero效果，同时也带回了标题栏和边框,在nativeEvent()会再次去掉标题栏
         //
@@ -43,7 +47,8 @@ void CFramelessWindow::setResizeable(bool resizeable)
         DWORD style = ::GetWindowLong(hwnd, GWL_STYLE);
         ::SetWindowLong(hwnd, GWL_STYLE, style | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CAPTION);
     }else{
-        setWindowFlag(Qt::WindowMaximizeButtonHint,false);
+        setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
+//        setWindowFlag(Qt::WindowMaximizeButtonHint,false);
 
         HWND hwnd = (HWND)this->winId();
         DWORD style = ::GetWindowLong(hwnd, GWL_STYLE);
