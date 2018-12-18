@@ -94,7 +94,13 @@ void CFramelessWindow::addIgnoreWidget(QWidget* widget)
 
 bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
-    MSG* msg = (MSG *)message;
+    //Workaround for known bug -> check Qt forum : https://forum.qt.io/topic/93141/qtablewidget-itemselectionchanged/13
+    #if (QT_VERSION == QT_VERSION_CHECK(5, 11, 1))
+    MSG* msg = *reinterpret_cast<MSG**>(message);
+    #else
+    MSG* msg = reinterpret_cast<MSG*>(message);
+    #endif
+    
     switch (msg->message)
     {
     case WM_NCCALCSIZE:
