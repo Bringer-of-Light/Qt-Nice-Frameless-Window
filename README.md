@@ -1,11 +1,11 @@
 # Qt-Nice-Frameless-Window
 
-[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
-[![Read the Docs](https://img.shields.io/readthedocs/pip.svg)]()
-
 Qt Frameless Window for both Windows and OS X, support Aero Snap, drop shadow on Windows, and support Native Style such as round corner, drop shadow on OS X. Based on QMainWindow.
 
 基于 QMainWindow 实现的效果很好的 Qt 无边框窗口,支持 Windows 和 OS X 系统。在 Windows 上，支持窗口阴影、Aero 效果等；在 OS X 上，支持原生窗口样式，比如窗口圆角、窗口阴影、三个系统按钮(关闭、最小化、最大化）等。
+
+[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
+[![LICENSE](https://img.shields.io/badge/license-Anti%20996-blue.svg)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 
 # Screenshots
 | Windows | OS X|

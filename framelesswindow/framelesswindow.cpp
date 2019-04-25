@@ -21,9 +21,12 @@ CFramelessWindow::CFramelessWindow(QWidget *parent)
       m_bJustMaximized(false),
       m_bResizeable(true)
 {
-    setWindowFlag(Qt::Window,true);
-    setWindowFlag(Qt::FramelessWindowHint, true);
-    setWindowFlag(Qt::WindowSystemMenuHint, true);
+//    setWindowFlag(Qt::Window,true);
+//    setWindowFlag(Qt::FramelessWindowHint, true);
+//    setWindowFlag(Qt::WindowSystemMenuHint, true);
+//    setWindowFlag() is not avaliable before Qt v5.9, so we should use setWindowFlags instead
+
+    setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint);
 
     setResizeable(m_bResizeable);
 }
@@ -33,7 +36,8 @@ void CFramelessWindow::setResizeable(bool resizeable)
     bool visible = isVisible();
     m_bResizeable = resizeable;
     if (m_bResizeable){
-        setWindowFlag(Qt::WindowMaximizeButtonHint);
+        setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
+//        setWindowFlag(Qt::WindowMaximizeButtonHint);
 
         //此行代码可以带回Aero效果，同时也带回了标题栏和边框,在nativeEvent()会再次去掉标题栏
         //
@@ -43,7 +47,8 @@ void CFramelessWindow::setResizeable(bool resizeable)
         DWORD style = ::GetWindowLong(hwnd, GWL_STYLE);
         ::SetWindowLong(hwnd, GWL_STYLE, style | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CAPTION);
     }else{
-        setWindowFlag(Qt::WindowMaximizeButtonHint,false);
+        setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
+//        setWindowFlag(Qt::WindowMaximizeButtonHint,false);
 
         HWND hwnd = (HWND)this->winId();
         DWORD style = ::GetWindowLong(hwnd, GWL_STYLE);
@@ -89,13 +94,23 @@ void CFramelessWindow::addIgnoreWidget(QWidget* widget)
 
 bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
-    MSG* msg = (MSG *)message;
+    //Workaround for known bug -> check Qt forum : https://forum.qt.io/topic/93141/qtablewidget-itemselectionchanged/13
+    #if (QT_VERSION == QT_VERSION_CHECK(5, 11, 1))
+    MSG* msg = *reinterpret_cast<MSG**>(message);
+    #else
+    MSG* msg = reinterpret_cast<MSG*>(message);
+    #endif
+    
     switch (msg->message)
     {
     case WM_NCCALCSIZE:
     {
+        NCCALCSIZE_PARAMS& params = *reinterpret_cast<NCCALCSIZE_PARAMS*>(msg->lParam);
+ 	if (params.rgrc[0].top != 0)
+		params.rgrc[0].top -= 1;
+
         //this kills the window frame and title bar we added with WS_THICKFRAME and WS_CAPTION
-        *result = 0;
+        *result = WVR_REDRAW;
         return true;
     }
     case WM_NCHITTEST:
@@ -217,10 +232,6 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
             if (m_bJustMaximized)
             {
                 QMainWindow::setContentsMargins(m_margins);
-                //after window back to normal size from maximized state
-                //a twinkle will happen, to avoid this twinkle
-                //repaint() is important used just before the window back to normal
-                repaint();
                 m_frames = QMargins();
                 m_bJustMaximized = false;
             }
