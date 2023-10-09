@@ -53,6 +53,8 @@ If you already have a project say myproject.pro, then method 2 should be used.
 1. Copy file "framelesswindow.h" and "framelesswindow.cpp" and "framelesswindow.mm" to myproject path.
 ![](screenshots/screenshot_step_20.png) 
 2. Add these lines to myproject.pro, then run qmake.
+
+if you have qmake file:
 ```
 HEADERS += \
     framelesswindow.h
@@ -60,12 +62,46 @@ HEADERS += \
 win32{
 	SOURCES += \
 		framelesswindow.cpp
+	LIBS += -lDwmapi -luser32
 }
 macx{
     OBJECTIVE_SOURCES += \
 		framelesswindow.mm
     LIBS += -framework Cocoa
 }
+```
+
+if you have cmake file:
+```
+cmake_minimum_required(VERSION 3.16)
+
+set(NiceFrameless_dir ${CMAKE_CURRENT_SOURCE_DIR}/Thirdparty/NiceFramelessWindow/framelesswindow) # path to your submodule
+
+if(WIN32)
+    set(MySource_files
+        ${NiceFrameless_dir}/framelesswindow.cpp
+    )
+    set(THIRD_LIBS
+ 	# to drawing shadow from Windows API when using mingw
+        Dwmapi
+	user32
+    )
+endif()
+
+if(APPLE)
+    set(MySource_files
+        ${NiceFrameless_dir}/framelesswindow.mm
+    )
+    set(THIRD_LIBS
+        "-framework Cocoa"
+    )
+    # from cmake 3.16 we have objc, objcxx
+    enable_language(OBJC)
+    enable_language(OBJCXX)
+endif()
+
+
+# now add the ${MySource_files} to your project sources and ${THIRD_LIBS} to your target link libraries.
 ```
 3. Use class "CFramelessWindow" as the base class instead of QMainWindow.
 
